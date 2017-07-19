@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.lmig.reciply.AppUserRepository;
 
-
 //import com.google.gson.Gson;
 
 @RestController
@@ -41,6 +40,12 @@ public class ReciplyRestController {
 		}
 		userRepository.save(user);
 		return HttpStatus.OK;
+	}
+
+	@RequestMapping(path = "/api/User/{id}", method = RequestMethod.GET)
+	public AppUser getUser(Model model, HttpSession session,
+			@PathVariable(name = "id", required = true) int id) {
+		return userRepository.findOne(id);
 	}
 	
 }

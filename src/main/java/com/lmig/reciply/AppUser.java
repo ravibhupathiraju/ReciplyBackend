@@ -21,29 +21,26 @@ import org.hibernate.annotations.CreationTimestamp;
 public class AppUser implements Serializable {
 	@Id
 	@GeneratedValue
-	int id;
+	private int id;
 
-	String name;
-	String location;
-	
-//	@CreationTimestamp
-//	@Temporal(TemporalType.TIMESTAMP)
-//	Date dateJoined;
-
-////	still in testing phase
-//	@ManyToMany(cascade=CascadeType.ALL)
-//	private Set<Movie> movies;
+	String userId;
+	String email;
+	String firstName;
+	String lastName;
+	String password;
 
 	public AppUser() {
-//		still in testing phase
-//		this.movies = new HashSet<Movie>();
+
 	}
 
-	public AppUser(String name, String location, Date dateJoined) {
-		this();
-		this.name = name;
-		this.location = location;
-//		this.dateJoined = dateJoined;
+	public AppUser(String userId, String email, String firstName,
+			String lastName, String password) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
 	}
 
 	public int getId() {
@@ -53,47 +50,55 @@ public class AppUser implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
+	
+public String getUserId() {
+		return userId;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-//	public Date getDateJoined() {
-//		return dateJoined;
-//	}
-//	
-//	public Date setDateJoined() {
-//		return dateJoined;
-//	}
+	public String getFirstName() {
+		return firstName;
+	}
 
-////still in testing phase
-//	public Set<Movie> getMovies() {
-//		return movies;
-//	}
-//
-//	public void setMovies(Set<Movie> movies) {
-//		this.movies = movies;
-//	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    //PUT method
-    public void merge(AppUser other) {
-        if (other.location != null) {
-            this.location = other.location;
-        }
-        if (other.name != null){
-            this.name=other.name;
-        }
-    }
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	// PUT
+//    public void merge(AppUser other) {
+//        if (other.location != null) {
+//            this.location = other.location;
+//        }
+//        if (other.name != null){
+//            this.name=other.name;
+//        }
+//    }
+	
 }
