@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+
 @Entity
 @Table(name = "AppUser")
 public class AppUser implements Serializable {
@@ -92,13 +93,22 @@ public String getUserId() {
 	}
 
 	// PUT
-//    public void merge(AppUser other) {
-//        if (other.location != null) {
-//            this.location = other.location;
-//        }
-//        if (other.name != null){
-//            this.name=other.name;
-//        }
-//    }
+	public void merge(AppUser other) {
+		if (other.firstName != null) {
+			this.firstName = other.firstName;
+		}
+		if (other.lastName != null) {
+			this.lastName = other.lastName;
+		}
+		if (other.email != null) {
+			this.email = other.email;
+		}
+		if (other.userId != null) {
+			this.userId = other.userId;
+		}
+		if (other.password != null) {
+			this.password = other.password;
+		}
+	}
 	
 }

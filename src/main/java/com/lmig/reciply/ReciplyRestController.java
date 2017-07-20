@@ -42,6 +42,17 @@ public class ReciplyRestController {
 		return HttpStatus.OK;
 	}
 
+	@RequestMapping(value = "/api/User", method = RequestMethod.PUT)
+	public AppUser updateUser(@RequestBody AppUser user) {
+//		if (user == null) {
+//			 return HttpStatus.BAD_REQUEST;
+//		}
+		System.out.println("In Put. UserID passed in equals=> "+user.getId());
+		AppUser existing = userRepository.findOne(user.getId());
+		existing.merge(user);
+		userRepository.save(existing);
+		return existing;
+	}
 	@RequestMapping(path = "/api/User/{id}", method = RequestMethod.GET)
 //	public AppUser getUser(Model model, HttpSession session,
 	public AppUser getUser(
