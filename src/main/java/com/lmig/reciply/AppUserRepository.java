@@ -1,4 +1,4 @@
-package com.lmig.reciply;
+package com.lmig.reciply; 
 
 
 import com.lmig.reciply.AppUser;
@@ -23,4 +23,4 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
 	List<AppUser> search(@Param("name") String Name, @Param("location") String Location
 //			, @Param("dateJoined") Date DateJoined
 			);
-}
+} 

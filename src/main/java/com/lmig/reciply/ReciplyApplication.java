@@ -46,6 +46,15 @@ public class ReciplyApplication {
 	@Autowired
 	private AppUserRepository appUserRepository;
 	
+	@Autowired
+	private MealPlanRepository mealPlanRepository; 
+	
+	@Autowired
+	private RecipeRepository recipeRepository;
+	
+	@Autowired
+	private IngredientRepository ingredientrepository;
+	
 	private static final Logger log = LoggerFactory.getLogger(ReciplyApplication.class);
 	
 
