@@ -15,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
 	
 	AppUser findById(Integer id);
+	AppUser findByUserIdAndPassword(String userid, String password);
 	
 //	@Query("SELECT u FROM AppUser u WHERE u.name LIKE CONCAT('%', :name, '%') "
 //			+ " AND ('' = :location OR u.location = :location) " )

@@ -43,9 +43,19 @@ public class ReciplyRestController {
 	}
 
 	@RequestMapping(path = "/api/User/{id}", method = RequestMethod.GET)
-	public AppUser getUser(Model model, HttpSession session,
+//	public AppUser getUser(Model model, HttpSession session,
+	public AppUser getUser(
 			@PathVariable(name = "id", required = true) int id) {
 		return userRepository.findOne(id);
+	}
+
+	@RequestMapping(path = "/api/login/{userId}/{password}", method = RequestMethod.GET)
+	public AppUser login(
+			@PathVariable(name = "userId", required = true) String userId, 
+			@PathVariable(name = "password", required = true) String password) {
+		System.out.println("userID len= "+userId.length()+" val- "+userId);
+		System.out.println("password len= "+password.length()+" val- "+password);
+		return userRepository.findByUserIdAndPassword(userId, password);
 	}
 	
 }
