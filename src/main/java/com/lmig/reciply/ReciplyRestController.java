@@ -24,10 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.lmig.reciply.AppUserRepository;
 import com.lmig.reciply.MealPlanRepository;
-
 //import com.google.gson.Gson;
 
 @RestController
@@ -60,8 +58,33 @@ public class ReciplyRestController {
 		System.out.println(mealPlan.toString());
 		// return HttpStatus.OK;
 		return mealPlan;
+	@RequestMapping(value = "/api/User", method = RequestMethod.PUT)
+	public AppUser updateUser(@RequestBody AppUser user) {
+//		if (user == null) {
+//			 return HttpStatus.BAD_REQUEST;
+//		}
+		System.out.println("In Put. UserID passed in equals=> "+user.getId());
+		AppUser existing = userRepository.findOne(user.getId());
+		existing.merge(user);
+		userRepository.save(existing);
+		return existing;
 	}
-	
+	@RequestMapping(path = "/api/User/{id}", method = RequestMethod.GET)
+//	public AppUser getUser(Model model, HttpSession session,
+	public AppUser getUser(
+			@PathVariable(name = "id", required = true) int id) {
+		return userRepository.findOne(id);
+	}
+
+	@RequestMapping(path = "/api/login/{userId}/{password}", method = RequestMethod.GET)
+	public AppUser login(
+			@PathVariable(name = "userId", required = true) String userId,
+			@PathVariable(name = "password", required = true) String password) {
+		System.out.println("userID len= "+userId.length()+" val- "+userId);
+		System.out.println("password len= "+password.length()+" val- "+password);
+		return userRepository.findByUserIdAndPassword(userId, password);
+	}
+
 	// Put method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.PUT)
 	// public HttpStatus addMealPlan(@RequestBody MealPlan mealPlan) {

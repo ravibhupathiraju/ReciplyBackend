@@ -22,3 +22,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### ignore dev properties file ###
+/src/main/resources/application-dev.properties
