@@ -17,11 +17,4 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
 	AppUser findById(Integer id);
 	AppUser findByUserIdAndPassword(String userid, String password);
 
-//	@Query("SELECT u FROM AppUser u WHERE u.name LIKE CONCAT('%', :name, '%') "
-//			+ " Agit cheND ('' = :location OR u.location = :location) "
-////			+ " AND ('' = :dateJoined OR u.dateJoined = :dateJoined) "
-//			)
-//	List<AppUser> search(@Param("name") String Name, @Param("location") String Location
-////			, @Param("dateJoined") Date DateJoined
-//			);
 }
