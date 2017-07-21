@@ -12,10 +12,12 @@ import com.lmig.reciply.Recipe;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,13 +35,16 @@ public class MealPlan  implements Serializable  {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue
+//	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "YOUR_ENTITY_SEQ")
+	@SequenceGenerator(name = "YOUR_ENTITY_SEQ", sequenceName = "YOUR_ENTITY_SEQ", allocationSize = 1)
 	int planId;
 	private String userID;
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate weekBeginDate;
-	@ManyToMany(cascade = CascadeType.ALL) 
-	@JoinColumn(name = "recipeId")
+//	@ManyToMany(cascade = CascadeType.ALL) 
+	@OneToMany(cascade = CascadeType.ALL,orphanRemoval=true)
+	@JoinColumn(name = "meal_id")
 	private List<Recipe> recipes; 
 //	private int recipeId;
 
