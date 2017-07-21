@@ -58,6 +58,7 @@ public class ReciplyRestController {
 		System.out.println(mealPlan.toString());
 		// return HttpStatus.OK;
 		return mealPlan;
+	}
 	@RequestMapping(value = "/api/User", method = RequestMethod.PUT)
 	public AppUser updateUser(@RequestBody AppUser user) {
 //		if (user == null) {

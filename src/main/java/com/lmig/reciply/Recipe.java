@@ -9,10 +9,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +30,9 @@ public class Recipe implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue
+//	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "YOUR_ENTITY_SEQ")
+	@SequenceGenerator(name = "YOUR_ENTITY_SEQ", sequenceName = "YOUR_ENTITY_SEQ", allocationSize = 1)
 	int recipeId;
 	private String dayNo;
 	private String recipeName;
@@ -37,8 +41,9 @@ public class Recipe implements Serializable {
 	
 
 	//	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="id")
+//	@ManyToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name="joinToRecipe")
 	private List<Ingredient> ingredients;
 	public int getRecipeId() {
 		return recipeId;
