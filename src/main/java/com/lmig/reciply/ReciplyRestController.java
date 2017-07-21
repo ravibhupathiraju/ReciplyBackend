@@ -78,6 +78,12 @@ public class ReciplyRestController {
 		return userRepository.findOne(id);
 	}
 
+	@RequestMapping(path = "/api/User/{id}", method = RequestMethod.DELETE)
+	public void deleteUser(
+			@PathVariable(name = "id", required = true) int id) {
+		userRepository.delete(id); 
+	}
+
 	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
 	public AppUser login(@RequestBody AppUser user) {
 		System.out.println("userID len= "+user.userId+" val- "+user.userId);
