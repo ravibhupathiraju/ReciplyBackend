@@ -1,8 +1,11 @@
 package com.lmig.reciply;
 
 import java.lang.annotation.Repeatable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -24,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lmig.reciply.AppUserRepository;
 import com.lmig.reciply.MealPlanRepository;
 //import com.google.gson.Gson;
@@ -36,6 +41,7 @@ public class ReciplyRestController {
 
 	@Autowired
 	private MealPlanRepository mealPlanRepository;
+	
 
 	// Post method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.POST)
@@ -78,6 +84,12 @@ public class ReciplyRestController {
 		return userRepository.findOne(id);
 	}
 
+	@RequestMapping(path = "/api/User/{id}", method = RequestMethod.DELETE)
+	public void deleteUser(
+			@PathVariable(name = "id", required = true) int id) {
+		userRepository.delete(id); 
+	}
+
 	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
 	public AppUser login(@RequestBody AppUser user) {
 		System.out.println("userID len= "+user.userId+" val- "+user.userId);
@@ -87,36 +99,25 @@ public class ReciplyRestController {
 	
 	// Put method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.PUT)
-	// public HttpStatus addMealPlan(@RequestBody MealPlan mealPlan) {
 	public MealPlan updateMealPlan(@RequestBody MealPlan mealPlan) {
 //		if (mealPlan == null) {
 //			return HttpStatus.BAD_REQUEST;
 //		}
-//		MealPlan existing = mealPlanRepository.findById(mealPlan.getPlanId());
-//		existing.merge(mealPlan);
-		System.out.println("ravi" + mealPlanRepository.findByplanId(mealPlan.getPlanId()));
-//		mealPlanRepository.delete(mealPlanRepository.findByplanId(mealPlan.getPlanId()));
-//		mealPlanRepository.de
+//		System.out.println("ravi" + mealPlanRepository.findByplanId(mealPlan.getPlanId()));
 		mealPlanRepository.save(mealPlan);
-		System.out.println(mealPlan.toString());
-		// return HttpStatus.OK;
 		return mealPlan;
 	}
 
+	
 	// Search method to get weekly plan, recipe name and ingredients information
 	// Input will be user id, week beginning date
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.GET)
-	public List<MealPlan> getMealPlan(@RequestParam(defaultValue = "") String userId,
-			@RequestParam(defaultValue = "") LocalDate date) {
-		List<MealPlan> result = new ArrayList<>();
-		result = mealPlanRepository.search(userId);
-		return mealPlanRepository.search(userId);
-	}
-
-	@RequestMapping(path = "/api/mealPlan2/{id}", method = RequestMethod.GET)
-	public List<MealPlan> getUser(@PathVariable(name = "id", required = true) String temp) {
-		System.out.println("temp " + temp);
-		return mealPlanRepository.search(temp);
+	public List<MealPlan> getMealPlan(
+			@RequestParam(defaultValue = "") String userId,
+			@RequestParam(defaultValue = "") String dateString) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate weekBeginDate= LocalDate.parse(dateString,formatter);
+		return mealPlanRepository.search(userId,weekBeginDate); 
 	}
 
 }
