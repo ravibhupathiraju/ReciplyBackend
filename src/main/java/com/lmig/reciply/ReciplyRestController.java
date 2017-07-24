@@ -90,6 +90,12 @@ public class ReciplyRestController {
 		userRepository.delete(id); 
 	}
 
+	@RequestMapping(path = "/api/register", method = RequestMethod.POST)
+	public AppUser register(@RequestBody AppUser user) {
+		userRepository.save(user);
+		return user;
+	}
+	
 	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
 	public AppUser login(@RequestBody AppUser user) {
 		System.out.println("userID len= "+user.userId+" val- "+user.userId);

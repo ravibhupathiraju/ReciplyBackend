@@ -5,6 +5,14 @@ package com.lmig.reciply;
 import com.lmig.reciply.AppUserRepository;
 
 import com.lmig.reciply.ReciplyApplication;
+
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 import com.lmig.reciply.Quote;
 
 //import springfox.documentation.builders.PathSelectors;
@@ -39,7 +47,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-// heroku
+@EnableSwagger2
 @Controller
 public class ReciplyApplication {
 
@@ -76,6 +84,18 @@ public class ReciplyApplication {
 		};
 	}
 
+	@Bean
+	public Docket swaggerSettings() {
+//		ApiInfo api_updated = new ApiInfo("Recip-ly API", "Recip-ly API Documentation", "Version 1.0", null, null, null, null);
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any())
+				.build()
+//				.apiInfo(api_updated)
+				.pathMapping("/");
+	}
+	
 //	@Bean
 //	public Docket swaggerSettings() {
 //		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
