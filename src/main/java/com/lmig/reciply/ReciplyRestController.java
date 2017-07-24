@@ -43,16 +43,6 @@ public class ReciplyRestController {
 	private MealPlanRepository mealPlanRepository;
 	
 
-	// Post method to add user
-	@RequestMapping(value = "/api/User", method = RequestMethod.POST)
-	public HttpStatus addUser(@RequestBody AppUser user) {
-		if (user == null) {
-			return HttpStatus.BAD_REQUEST;
-		}
-		userRepository.save(user);
-		return HttpStatus.OK;
-	}
-
 	// Post method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.POST)
 	// public HttpStatus addMealPlan(@RequestBody MealPlan mealPlan) {
@@ -65,6 +55,17 @@ public class ReciplyRestController {
 		// return HttpStatus.OK;
 		return mealPlan;
 	}	
+	
+	// Post method to add user
+	@RequestMapping(value = "/api/User", method = RequestMethod.POST)
+	public HttpStatus addUser(@RequestBody AppUser user) {
+		if (user == null) {
+			return HttpStatus.BAD_REQUEST;
+		}
+		userRepository.save(user);
+		return HttpStatus.OK;
+	}
+	
 	@RequestMapping(value = "/api/User", method = RequestMethod.PUT)
 	public AppUser updateUser(@RequestBody AppUser user) {
 //		if (user == null) {
@@ -83,15 +84,19 @@ public class ReciplyRestController {
 		return userRepository.findOne(id);
 	}
 
-	@RequestMapping(path = "/api/login/{userId}/{password}", method = RequestMethod.GET)
-	public AppUser login(
-			@PathVariable(name = "userId", required = true) String userId,
-			@PathVariable(name = "password", required = true) String password) {
-		System.out.println("userID len= "+userId.length()+" val- "+userId);
-		System.out.println("password len= "+password.length()+" val- "+password);
-		return userRepository.findByUserIdAndPassword(userId, password);
+	@RequestMapping(path = "/api/User/{id}", method = RequestMethod.DELETE)
+	public void deleteUser(
+			@PathVariable(name = "id", required = true) int id) {
+		userRepository.delete(id); 
 	}
 
+	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
+	public AppUser login(@RequestBody AppUser user) {
+		System.out.println("userID len= "+user.userId+" val- "+user.userId);
+		System.out.println("password len= "+user.password.length()+" val- "+user.password);
+		return userRepository.findByUserIdAndPassword(user.userId, user.password);
+	}
+	
 	// Put method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.PUT)
 	public MealPlan updateMealPlan(@RequestBody MealPlan mealPlan) {
