@@ -3,6 +3,7 @@ package com.lmig.reciply;
 
 import com.lmig.reciply.MealPlan;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,10 @@ public interface MealPlanRepository extends JpaRepository<MealPlan, Integer> {
 	List<MealPlan> findByuserID(String userId);
 	MealPlan findByplanId(Integer id);
 //	@Query("SELECT m from MealPlan m where ('' = :userID OR m.userID = :userId)")
-	@Query("SELECT m from MealPlan m where m.userID = :userId)")
+//	@Query("SELECT m from MealPlan m where m.userID = :userId)")
+////	@Query("SELECT m from MealPlan m)")
+//	List<MealPlan> search(@Param("userId") String userId);
+	@Query("SELECT m from MealPlan m where m.userID = :userId and m.weekBeginDate = :date)")
 //	@Query("SELECT m from MealPlan m)")
-	List<MealPlan> search(@Param("userId") String userId);
+	List<MealPlan> search(@Param("userId") String userId,@Param("date") LocalDate weekBeginDate);
 }
