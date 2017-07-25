@@ -28,8 +28,8 @@ public class Ingredient  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 //	@GeneratedValue
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "YOUR_ENTITY_SEQ")
-	@SequenceGenerator(name = "YOUR_ENTITY_SEQ", sequenceName = "YOUR_ENTITY_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Ingredient_ENTITY_SEQ")
+	@SequenceGenerator(name = "Ingredient_ENTITY_SEQ", sequenceName = "Ingredient_ENTITY_SEQ", allocationSize = 1)
 	int id;
 	private String ingredientName;
 	private String ingredientMissing;
