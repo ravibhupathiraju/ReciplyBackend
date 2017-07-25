@@ -31,8 +31,8 @@ public class Recipe implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 //	@GeneratedValue
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "YOUR_ENTITY_SEQ")
-	@SequenceGenerator(name = "YOUR_ENTITY_SEQ", sequenceName = "YOUR_ENTITY_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Recipe_ENTITY_SEQ")
+	@SequenceGenerator(name = "Recipe_ENTITY_SEQ", sequenceName = "Recipe_ENTITY_SEQ", allocationSize = 1)
 	int recipeId;
 	private String dayNo;
 	private String recipeName;

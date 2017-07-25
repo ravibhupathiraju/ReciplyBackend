@@ -36,8 +36,8 @@ public class MealPlan  implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	@Id
 //	@GeneratedValue
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "YOUR_ENTITY_SEQ")
-	@SequenceGenerator(name = "YOUR_ENTITY_SEQ", sequenceName = "YOUR_ENTITY_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Meal_ENTITY_SEQ")
+	@SequenceGenerator(name = "Meal_ENTITY_SEQ", sequenceName = "Meal_ENTITY_SEQ", allocationSize = 1)
 	int planId;
 	private String userID;
 	@JsonFormat(pattern = "yyyy-MM-dd")
