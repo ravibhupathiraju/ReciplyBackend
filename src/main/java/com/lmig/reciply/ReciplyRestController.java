@@ -39,6 +39,7 @@ import io.swagger.annotations.ApiOperation;
 
 import com.lmig.reciply.AppUserRepository;
 import com.lmig.reciply.MealPlanRepository;
+import com.lmig.reciply.IngredientRepository;
 //import com.google.gson.Gson;
 
 @RestController
@@ -49,6 +50,9 @@ public class ReciplyRestController {
 
 	@Autowired
 	private MealPlanRepository mealPlanRepository;
+	
+	@Autowired
+	private IngredientRepository ingredientRepository;
 
 	// Post method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.POST)
@@ -146,10 +150,10 @@ public class ReciplyRestController {
 			return mealPlanRepository.search(userId);
 		} else {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			 weekBeginDate = LocalDate.parse(dateString, formatter);
-				return mealPlanRepository.searchWithDate(userId, weekBeginDate);
+			weekBeginDate = LocalDate.parse(dateString, formatter);
+			return mealPlanRepository.searchWithDate(userId, weekBeginDate);
 		}
-		
+
 	}
 
 	@RequestMapping(path = "/api/mealPlan/{id}", method = RequestMethod.DELETE)
@@ -157,5 +161,18 @@ public class ReciplyRestController {
 			@PathVariable(name = "id", required = true) int id) {
 		mealPlanRepository.delete(id);
 	}
+
+
+	// POST method to update Ingredients entity related to shopping list
+	@RequestMapping(value = "/api/ShoppingList", method = RequestMethod.PUT)
+	public List<Ingredient> postShopList(@RequestBody List<Ingredient> ingredient) {
+		// if (mealPlan == null) {
+		// return new ResponseEntity<MealPlan>(HttpStatus.BAD_REQUEST);
+		// }
+		ingredientRepository.save(ingredient);
+		System.out.println(ingredient.toString());
+		return ingredient;
+	}
+
 
 }

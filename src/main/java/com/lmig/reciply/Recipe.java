@@ -35,37 +35,37 @@ public class Recipe implements Serializable {
 	@SequenceGenerator(name = "Recipe_ENTITY_SEQ", sequenceName = "Recipe_ENTITY_SEQ", allocationSize = 1)
 	int recipeId;
 	private String dayNo;
-	private String recipeName;
-	private String recipeLink;
-	private String recipeImgLink;
+	private String title;
+	private String href;
+	private String thumbnail;
 	
 
 	//	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 //	@ManyToMany(cascade=CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
-	@JoinColumn(name="joinToRecipe")
+	@JoinColumn(name="joinToRecipe")  
 	private List<Ingredient> ingredients;
 	public int getRecipeId() {
 		return recipeId;
 	}
-	public String getRecipeName() {
-		return recipeName;
+	public String gettitle() {
+		return title;
 	}
-	public void setRecipeName(String recipeName) {
-		this.recipeName = recipeName;
+	public void settitle(String title) {
+		this.title = title;
 	}
-	public String getRecipeLink() {
-		return recipeLink;
+	public String gethref() {
+		return href;
 	}
-	public void setRecipeLink(String recipeLink) {
-		this.recipeLink = recipeLink;
+	public void sethref(String href) {
+		this.href = href;
 	}
-	public String getRecipeImgLink() {
-		return recipeImgLink;
+	public String getthumbnail() {
+		return thumbnail;
 	}
 
-	public void setRecipeImgLink(String recipeImgLink) {
-		this.recipeImgLink = recipeImgLink;
+	public void setthumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 	public List<Ingredient> getIngredients() {
 		return ingredients;
@@ -81,8 +81,8 @@ public class Recipe implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Recipe [recipeId=" + recipeId + ", dayNo=" + dayNo + ", recipeName=" + recipeName + ", recipeLink="
-				+ recipeLink + ", recipeImgLink=" + recipeImgLink + ", ingredients=" + ingredients + "]";
+		return "Recipe [recipeId=" + recipeId + ", dayNo=" + dayNo + ", title=" + title + ", href="
+				+ href + ", thumbnail=" + thumbnail + ", ingredients=" + ingredients + "]";
 	}
 
 }
