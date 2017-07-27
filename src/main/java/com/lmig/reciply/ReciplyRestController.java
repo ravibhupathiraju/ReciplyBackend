@@ -52,17 +52,12 @@ public class ReciplyRestController {
 
 	// Post method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.POST)
-	// public HttpStatus addMealPlan(@RequestBody MealPlan mealPlan) {
-	// public ResponseEntity<MealPlan> addMealPlan(@RequestBody MealPlan
-	// mealPlan) {
 	public MealPlan addMealPlan(@RequestBody MealPlan mealPlan) {
 		// if (mealPlan == null) {
 		// return new ResponseEntity<MealPlan>(HttpStatus.BAD_REQUEST);
 		// }
 		mealPlanRepository.save(mealPlan);
 		System.out.println(mealPlan.toString());
-		// return HttpStatus.OK;
-		// return new ResponseEntity<MealPlan>(HttpStatus.CREATED);
 		return mealPlan;
 	}
 
@@ -146,9 +141,15 @@ public class ReciplyRestController {
 	public List<MealPlan> getMealPlan(
 			@RequestParam(defaultValue = "") String userId,
 			@RequestParam(defaultValue = "") String dateString) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate weekBeginDate = LocalDate.parse(dateString, formatter);
-		return mealPlanRepository.search(userId, weekBeginDate);
+		LocalDate weekBeginDate = null;
+		if (dateString.equals("")) {
+			return mealPlanRepository.search(userId);
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			 weekBeginDate = LocalDate.parse(dateString, formatter);
+				return mealPlanRepository.searchWithDate(userId, weekBeginDate);
+		}
+		
 	}
 
 	@RequestMapping(path = "/api/mealPlan/{id}", method = RequestMethod.DELETE)
