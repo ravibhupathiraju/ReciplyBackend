@@ -78,6 +78,12 @@ public class MealPlan  implements Serializable  {
 
 	@Override
 	public String toString() {
+//		for (int i = 0; i < recipes.size(); i++) {
+//			System.out.println("ravi here: " + recipes.get(i).getRecipeName());
+//			for (Recipe recipe : recipes) {
+//				System.out.println("Ravi Ingredients here: " + recipe.getIngredients());
+//			}
+//		}
 		return "MealPlan [planId=" + planId + ", userID=" + userID + ", weekBeginDate=" + weekBeginDate + ", Recipe="
 				+ recipes + "]";
 	}
