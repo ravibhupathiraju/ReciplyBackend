@@ -88,6 +88,7 @@ public class ReciplyApplication {
 	public Docket swaggerSettings() {
 //		ApiInfo api_updated = new ApiInfo("Recip-ly API", "Recip-ly API Documentation", "Version 1.0", null, null, null, null);
 		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("Recip-ly API")
 				.select()
 				.apis(RequestHandlerSelectors.any())
 				.paths(PathSelectors.any())

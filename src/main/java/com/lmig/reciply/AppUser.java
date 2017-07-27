@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,9 +14,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
-
 
 @Entity
 @Table(name = "AppUser")
@@ -24,10 +28,24 @@ public class AppUser implements Serializable {
 	@GeneratedValue
 	private int id;
 
+	@NotNull(message = "User Name is required input", groups = New.class)
+	@Null(groups = Existing.class)
+	@Size(min=6, max=15)
 	String userId;
+	
+	@NotNull(message = "Email is required input", groups = New.class)
 	String email;
+	
+	@NotNull(message = "First Name is required input", groups = New.class)
+	@Size(min=2, max=30)
 	String firstName;
+	
+	@NotNull(message = "Last Name is required input", groups = New.class)
+	@Size(min=2, max=30)
 	String lastName;
+	
+	@NotNull(message = "Password is required input", groups = New.class)
+	@Size(min=6, max=16)
 	String password;
 
 	public AppUser() {
@@ -92,7 +110,14 @@ public String getUserId() {
 		this.password = password;
 	}
 
-	// PUT
+	@Override
+	public String toString() {
+		return "AppUser [id=" + id + ", userId=" + userId + ", email=" + email
+				+ ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", password=" + password + "]";
+	}
+
+	// Method to update any changes to User fields during PUT call
 	public void merge(AppUser other) {
 		if (other.firstName != null) {
 			this.firstName = other.firstName;
@@ -110,5 +135,12 @@ public String getUserId() {
 			this.password = other.password;
 		}
 	}
+
+	// Added for field validations using the JPA annotations
+    public interface Existing {
+    }
+
+    public interface New {
+    }	
 	
 }

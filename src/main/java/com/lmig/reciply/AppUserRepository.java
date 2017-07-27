@@ -16,5 +16,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
 
 	AppUser findById(Integer id);
 	AppUser findByUserIdAndPassword(String userid, String password);
+	AppUser findByUserId(String userid);
 
 }
