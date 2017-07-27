@@ -17,11 +17,8 @@ public interface MealPlanRepository extends JpaRepository<MealPlan, Integer> {
 	
 	List<MealPlan> findByuserID(String userId);
 	MealPlan findByplanId(Integer id);
-//	@Query("SELECT m from MealPlan m where ('' = :userID OR m.userID = :userId)")
-//	@Query("SELECT m from MealPlan m where m.userID = :userId)")
-////	@Query("SELECT m from MealPlan m)")
-//	List<MealPlan> search(@Param("userId") String userId);
 	@Query("SELECT m from MealPlan m where m.userID = :userId and m.weekBeginDate = :date)")
-//	@Query("SELECT m from MealPlan m)")
-	List<MealPlan> search(@Param("userId") String userId,@Param("date") LocalDate weekBeginDate);
+	List<MealPlan> searchWithDate(@Param("userId") String userId,@Param("date") LocalDate weekBeginDate);
+	@Query("SELECT m from MealPlan m where m.userID = :userId)")
+	List<MealPlan> search(@Param("userId") String userId);
 }
