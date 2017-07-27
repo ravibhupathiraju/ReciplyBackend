@@ -129,4 +129,9 @@ public class ReciplyRestController {
 		
 	}
 
+	@RequestMapping(path = "/api/mealPlan/{id}", method = RequestMethod.DELETE)
+	public void deleteMealPlan(@PathVariable(name = "id", required = true) int id) {
+		mealPlanRepository.delete(id);
+	}
+	
 }
