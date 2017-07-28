@@ -28,25 +28,22 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "MealPlan")
-public class MealPlan  implements Serializable  {
+public class MealPlan implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-//	@GeneratedValue
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Meal_ENTITY_SEQ")
 	@SequenceGenerator(name = "Meal_ENTITY_SEQ", sequenceName = "Meal_ENTITY_SEQ", allocationSize = 1)
 	int planId;
 	private String userID;
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate weekBeginDate;
-//	@ManyToMany(cascade = CascadeType.ALL) 
-	@OneToMany(cascade = CascadeType.ALL,orphanRemoval=true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "meal_id")
-	private List<Recipe> recipes; 
-//	private int recipeId;
+	private List<Recipe> recipes;
 
 	public int getPlanId() {
 		return planId;
@@ -78,22 +75,9 @@ public class MealPlan  implements Serializable  {
 
 	@Override
 	public String toString() {
-//		for (int i = 0; i < recipes.size(); i++) {
-//			System.out.println("ravi here: " + recipes.get(i).getRecipeName());
-//			for (Recipe recipe : recipes) {
-//				System.out.println("Ravi Ingredients here: " + recipe.getIngredients());
-//			}
-//		}
-		return "MealPlan [planId=" + planId + ", userID=" + userID + ", weekBeginDate=" + weekBeginDate + ", Recipe="
-				+ recipes + "]";
+		return "MealPlan [planId=" + planId + ", userID=" + userID
+				+ ", weekBeginDate=" + weekBeginDate + ", Recipe=" + recipes
+				+ "]";
 	}
-
-//	public int getRecipeId() {
-//		return recipeId;
-//	}
-//
-//	public void setRecipeId(int recipeId) {
-//		this.recipeId = recipeId;
-//	}
 
 }

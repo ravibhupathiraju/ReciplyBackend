@@ -29,23 +29,23 @@ public class AppUser implements Serializable {
 	private int id;
 
 	@NotNull(message = "User Name is required input", groups = New.class)
-	@Null(groups = Existing.class)
-	@Size(min=6, max=15)
+	@Size(min = 6, max = 15)
+	// @Column(unique=true)
 	String userId;
-	
+
 	@NotNull(message = "Email is required input", groups = New.class)
 	String email;
-	
+
 	@NotNull(message = "First Name is required input", groups = New.class)
-	@Size(min=2, max=30)
+	@Size(min = 2, max = 30)
 	String firstName;
-	
+
 	@NotNull(message = "Last Name is required input", groups = New.class)
-	@Size(min=2, max=30)
+	@Size(min = 2, max = 30)
 	String lastName;
-	
+
 	@NotNull(message = "Password is required input", groups = New.class)
-	@Size(min=6, max=16)
+	@Size(min = 6, max = 16)
 	String password;
 
 	public AppUser() {
@@ -69,8 +69,8 @@ public class AppUser implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-public String getUserId() {
+
+	public String getUserId() {
 		return userId;
 	}
 
@@ -137,10 +137,10 @@ public String getUserId() {
 	}
 
 	// Added for field validations using the JPA annotations
-    public interface Existing {
-    }
+	public interface Existing {
+	}
 
-    public interface New {
-    }	
-	
+	public interface New {
+	}
+
 }
