@@ -25,44 +25,48 @@ import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "Ingredient")
-public class Ingredient  implements Serializable {
+public class Ingredient implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-//	@GeneratedValue
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Ingredient_ENTITY_SEQ")
 	@SequenceGenerator(name = "Ingredient_ENTITY_SEQ", sequenceName = "Ingredient_ENTITY_SEQ", allocationSize = 1)
-//	@ApiModelProperty(value = "Ingredient ID", required = true)
-//	@NotNull 
+	// @ApiModelProperty(value = "Ingredient ID", required = true)
+	// @NotNull
 	int id;
-//	@ApiModelProperty(value = "Ingredient name", required = true)
-//	@NotNull
+	// @ApiModelProperty(value = "Ingredient name", required = true)
+	// @NotNull
 	private String ingredientName;
-//	@ApiModelProperty(value = "Ingredient Missing Y", required = true)
-//	@NotNull
+	// @ApiModelProperty(value = "Ingredient Missing Y", required = true)
+	// @NotNull
 	private String ingredientMissing;
+
 	public int getId() {
 		return id;
 	}
+
 	public String getIngredientName() {
 		return ingredientName;
 	}
+
 	public void setIngredientName(String ingredientName) {
 		this.ingredientName = ingredientName;
 	}
+
 	public String getIngredientMissing() {
 		return ingredientMissing;
 	}
+
 	public void setIngredientMissing(String ingredientMissing) {
 		this.ingredientMissing = ingredientMissing;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Ingredient [Id=" + id + ", ingredientName=" + ingredientName + ", ingredientMissing="
-				+ ingredientMissing + "]";
+		return "Ingredient [Id=" + id + ", ingredientName=" + ingredientName
+				+ ", ingredientMissing=" + ingredientMissing + "]";
 	}
-	
+
 }

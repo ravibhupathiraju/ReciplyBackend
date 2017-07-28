@@ -1,6 +1,5 @@
 package com.lmig.reciply;
 
-
 import com.lmig.reciply.Recipe;
 
 import java.time.LocalDateTime;
@@ -13,5 +12,5 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
-	
+
 }

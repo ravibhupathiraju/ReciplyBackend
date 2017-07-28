@@ -40,7 +40,6 @@ import io.swagger.annotations.ApiOperation;
 import com.lmig.reciply.AppUserRepository;
 import com.lmig.reciply.MealPlanRepository;
 import com.lmig.reciply.IngredientRepository;
-//import com.google.gson.Gson;
 
 @RestController
 public class ReciplyRestController {
@@ -54,20 +53,10 @@ public class ReciplyRestController {
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
-	// Post method to add mealplan
-	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.POST)
-	public MealPlan addMealPlan(@RequestBody MealPlan mealPlan) {
-		// if (mealPlan == null) {
-		// return new ResponseEntity<MealPlan>(HttpStatus.BAD_REQUEST);
-		// }
-		mealPlanRepository.save(mealPlan);
-		System.out.println(mealPlan.toString());
-		return mealPlan;
-	}
-
 	// Post method to add user
 	@RequestMapping(value = "/api/User", method = RequestMethod.POST)
-	public HttpStatus addUser(@Validated(AppUser.New.class) @RequestBody AppUser user) {
+	public HttpStatus addUser(
+			@Validated(AppUser.New.class) @RequestBody AppUser user) {
 		if (user == null) {
 			return HttpStatus.BAD_REQUEST;
 		}
@@ -76,11 +65,8 @@ public class ReciplyRestController {
 	}
 
 	@RequestMapping(value = "/api/User", method = RequestMethod.PUT)
-	public AppUser updateUser(@Validated(AppUser.Existing.class) @RequestBody AppUser user) {
-		// if (user == null) {
-		// return HttpStatus.BAD_REQUEST;
-		// }
-		System.out.println("In Put. UserID passed in equals=> " + user.getId());
+	public AppUser updateUser(
+			@Validated(AppUser.Existing.class) @RequestBody AppUser user) {
 		AppUser existing = userRepository.findOne(user.getId());
 		existing.merge(user);
 		userRepository.save(existing);
@@ -104,8 +90,8 @@ public class ReciplyRestController {
 
 	@RequestMapping(path = "/api/register", method = RequestMethod.POST)
 	@ApiOperation(value = "Registers a new user", notes = "Will add a new user to the recip-ly database.")
-	public AppUser register(@Validated(AppUser.New.class) @RequestBody AppUser user) {
-		System.out.println("*** In Register ***");
+	public AppUser register(
+			@Validated(AppUser.New.class) @RequestBody AppUser user) {
 		AppUser userFound = userRepository.findByUserId(user.userId);
 		if (userFound == null) {
 			userRepository.save(user);
@@ -120,7 +106,18 @@ public class ReciplyRestController {
 
 	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
 	public AppUser login(@RequestBody AppUser user) {
-		return userRepository.findByUserIdAndPassword(user.userId, user.password);
+		return userRepository.findByUserIdAndPassword(user.userId,
+				user.password);
+	}
+
+	// Post method to add mealplan
+	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.POST)
+	public MealPlan addMealPlan(@RequestBody MealPlan mealPlan) {
+		// if (mealPlan == null) {
+		// return new ResponseEntity<MealPlan>(HttpStatus.BAD_REQUEST);
+		// }
+		mealPlanRepository.save(mealPlan);
+		return mealPlan;
 	}
 
 	// Put method to add mealplan
@@ -128,9 +125,6 @@ public class ReciplyRestController {
 	public MealPlan updateMealPlan(@RequestBody MealPlan mealPlan) {
 		// if (mealPlan == null) {
 		// return HttpStatus.BAD_REQUEST;
-		// }
-		// System.out.println("ravi" +
-		// mealPlanRepository.findByplanId(mealPlan.getPlanId()));
 		mealPlanRepository.save(mealPlan);
 		return mealPlan;
 	}
@@ -138,13 +132,15 @@ public class ReciplyRestController {
 	// Search method to get weekly plan, recipe name and ingredients information
 	// Input will be user id, week beginning date
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.GET)
-	public List<MealPlan> getMealPlan(@RequestParam(defaultValue = "") String userId,
+	public List<MealPlan> getMealPlan(
+			@RequestParam(defaultValue = "") String userId,
 			@RequestParam(defaultValue = "") String dateString) {
 		LocalDate weekBeginDate = null;
 		if (dateString.equals("")) {
 			return mealPlanRepository.search(userId);
 		} else {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter formatter = DateTimeFormatter
+					.ofPattern("yyyy-MM-dd");
 			weekBeginDate = LocalDate.parse(dateString, formatter);
 			return mealPlanRepository.searchWithDate(userId, weekBeginDate);
 		}
@@ -152,13 +148,15 @@ public class ReciplyRestController {
 	}
 
 	@RequestMapping(path = "/api/mealPlan/{id}", method = RequestMethod.DELETE)
-	public void deleteMealPlan(@PathVariable(name = "id", required = true) int id) {
+	public void deleteMealPlan(
+			@PathVariable(name = "id", required = true) int id) {
 		mealPlanRepository.delete(id);
 	}
 
 	// POST method to update Ingredients entity related to shopping list
 	@RequestMapping(value = "/api/ShoppingList", method = RequestMethod.PUT)
-	public List<Ingredient> postShopList(@RequestBody List<Ingredient> ingredient) {
+	public List<Ingredient> postShopList(
+			@RequestBody List<Ingredient> ingredient) {
 		// if (mealPlan == null) {
 		// return new ResponseEntity<MealPlan>(HttpStatus.BAD_REQUEST);
 		// }
@@ -170,16 +168,19 @@ public class ReciplyRestController {
 	// Search method to get weekly plan, recipe name and ingredients information
 	// Input will be user id, week beginning date
 	@RequestMapping(value = "/api/shoppinglist", method = RequestMethod.GET)
-	public List<Ingredient> getShoppingList(@RequestParam(defaultValue = "") String userId,
+	public List<Ingredient> getShoppingList(
+			@RequestParam(defaultValue = "") String userId,
 			@RequestParam(defaultValue = "") String dateString) {
 		LocalDate weekBeginDate = null;
 		if (dateString.equals("")) {
 			return null;
 		} else {
 			ArrayList<Ingredient> missingIngredients = new ArrayList<Ingredient>();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter formatter = DateTimeFormatter
+					.ofPattern("yyyy-MM-dd");
 			weekBeginDate = LocalDate.parse(dateString, formatter);
-			List<MealPlan> mealPlan = mealPlanRepository.searchWithDate(userId, weekBeginDate);
+			List<MealPlan> mealPlan = mealPlanRepository.searchWithDate(userId,
+					weekBeginDate);
 			for (MealPlan mealPlan2 : mealPlan) {
 				List<Recipe> recipes = mealPlan2.getRecipes();
 				for (Recipe recipe : recipes) {
