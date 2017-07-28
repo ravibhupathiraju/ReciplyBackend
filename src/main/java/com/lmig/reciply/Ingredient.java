@@ -16,8 +16,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "Ingredient")
@@ -30,8 +34,14 @@ public class Ingredient  implements Serializable {
 //	@GeneratedValue
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Ingredient_ENTITY_SEQ")
 	@SequenceGenerator(name = "Ingredient_ENTITY_SEQ", sequenceName = "Ingredient_ENTITY_SEQ", allocationSize = 1)
+	@ApiModelProperty(value = "Ingredient ID", required = true)
+	@NotNull 
 	int id;
+	@ApiModelProperty(value = "Ingredient name", required = true)
+	@NotNull
 	private String ingredientName;
+	@ApiModelProperty(value = "Ingredient Missing Y", required = true)
+	@NotNull
 	private String ingredientMissing;
 	public int getId() {
 		return id;

@@ -50,7 +50,7 @@ public class ReciplyRestController {
 
 	@Autowired
 	private MealPlanRepository mealPlanRepository;
-	
+
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
@@ -67,8 +67,7 @@ public class ReciplyRestController {
 
 	// Post method to add user
 	@RequestMapping(value = "/api/User", method = RequestMethod.POST)
-	public HttpStatus addUser(
-			@Validated(AppUser.New.class) @RequestBody AppUser user) {
+	public HttpStatus addUser(@Validated(AppUser.New.class) @RequestBody AppUser user) {
 		if (user == null) {
 			return HttpStatus.BAD_REQUEST;
 		}
@@ -77,8 +76,7 @@ public class ReciplyRestController {
 	}
 
 	@RequestMapping(value = "/api/User", method = RequestMethod.PUT)
-	public AppUser updateUser(
-			@Validated(AppUser.Existing.class) @RequestBody AppUser user) {
+	public AppUser updateUser(@Validated(AppUser.Existing.class) @RequestBody AppUser user) {
 		// if (user == null) {
 		// return HttpStatus.BAD_REQUEST;
 		// }
@@ -106,25 +104,23 @@ public class ReciplyRestController {
 
 	@RequestMapping(path = "/api/register", method = RequestMethod.POST)
 	@ApiOperation(value = "Registers a new user", notes = "Will add a new user to the recip-ly database.")
-	public AppUser register(
-			@Validated(AppUser.New.class) @RequestBody AppUser user) {
+	public AppUser register(@Validated(AppUser.New.class) @RequestBody AppUser user) {
 		System.out.println("*** In Register ***");
-		AppUser userFound = userRepository.findByUserId(user.userId);	
-		if (userFound == null){
+		AppUser userFound = userRepository.findByUserId(user.userId);
+		if (userFound == null) {
 			userRepository.save(user);
-			return user;			
+			return user;
 		} else {
-			//user found in database so don't add them and return a empty user
+			// user found in database so don't add them and return a empty user
 			AppUser returnEmptyUser = new AppUser();
-			return returnEmptyUser;			
+			return returnEmptyUser;
 		}
 
 	}
 
 	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
 	public AppUser login(@RequestBody AppUser user) {
-		return userRepository.findByUserIdAndPassword(user.userId,
-				user.password);
+		return userRepository.findByUserIdAndPassword(user.userId, user.password);
 	}
 
 	// Put method to add mealplan
@@ -142,8 +138,7 @@ public class ReciplyRestController {
 	// Search method to get weekly plan, recipe name and ingredients information
 	// Input will be user id, week beginning date
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.GET)
-	public List<MealPlan> getMealPlan(
-			@RequestParam(defaultValue = "") String userId,
+	public List<MealPlan> getMealPlan(@RequestParam(defaultValue = "") String userId,
 			@RequestParam(defaultValue = "") String dateString) {
 		LocalDate weekBeginDate = null;
 		if (dateString.equals("")) {
@@ -157,11 +152,9 @@ public class ReciplyRestController {
 	}
 
 	@RequestMapping(path = "/api/mealPlan/{id}", method = RequestMethod.DELETE)
-	public void deleteMealPlan(
-			@PathVariable(name = "id", required = true) int id) {
+	public void deleteMealPlan(@PathVariable(name = "id", required = true) int id) {
 		mealPlanRepository.delete(id);
 	}
-
 
 	// POST method to update Ingredients entity related to shopping list
 	@RequestMapping(value = "/api/ShoppingList", method = RequestMethod.PUT)
@@ -174,5 +167,34 @@ public class ReciplyRestController {
 		return ingredient;
 	}
 
+	// Search method to get weekly plan, recipe name and ingredients information
+	// Input will be user id, week beginning date
+	@RequestMapping(value = "/api/shoppinglist", method = RequestMethod.GET)
+	public List<Ingredient> getShoppingList(@RequestParam(defaultValue = "") String userId,
+			@RequestParam(defaultValue = "") String dateString) {
+		LocalDate weekBeginDate = null;
+		if (dateString.equals("")) {
+			return null;
+		} else {
+			ArrayList<Ingredient> missingIngredients = new ArrayList<Ingredient>();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			weekBeginDate = LocalDate.parse(dateString, formatter);
+			List<MealPlan> mealPlan = mealPlanRepository.searchWithDate(userId, weekBeginDate);
+			for (MealPlan mealPlan2 : mealPlan) {
+				List<Recipe> recipes = mealPlan2.getRecipes();
+				for (Recipe recipe : recipes) {
+					List<Ingredient> ingredients = recipe.getIngredients();
+					for (Ingredient ingredient : ingredients) {
+						if (ingredient.getIngredientMissing().equals("Y")) {
+							missingIngredients.add(ingredient);
+						}
+					}
+				}
+			}
+
+			return missingIngredients;
+		}
+
+	}
 
 }
