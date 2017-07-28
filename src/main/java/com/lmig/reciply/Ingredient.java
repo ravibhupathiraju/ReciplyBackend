@@ -34,11 +34,11 @@ public class Ingredient  implements Serializable {
 //	@GeneratedValue
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Ingredient_ENTITY_SEQ")
 	@SequenceGenerator(name = "Ingredient_ENTITY_SEQ", sequenceName = "Ingredient_ENTITY_SEQ", allocationSize = 1)
-	@ApiModelProperty(value = "Ingredient ID", required = true)
-	@NotNull 
+//	@ApiModelProperty(value = "Ingredient ID", required = true)
+//	@NotNull 
 	int id;
-	@ApiModelProperty(value = "Ingredient name", required = true)
-	@NotNull
+//	@ApiModelProperty(value = "Ingredient name", required = true)
+//	@NotNull
 	private String ingredientName;
 //	@ApiModelProperty(value = "Ingredient Missing Y", required = true)
 //	@NotNull
