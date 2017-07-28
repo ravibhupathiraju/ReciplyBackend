@@ -40,8 +40,8 @@ public class Ingredient  implements Serializable {
 	@ApiModelProperty(value = "Ingredient name", required = true)
 	@NotNull
 	private String ingredientName;
-	@ApiModelProperty(value = "Ingredient Missing Y", required = true)
-	@NotNull
+//	@ApiModelProperty(value = "Ingredient Missing Y", required = true)
+//	@NotNull
 	private String ingredientMissing;
 	public int getId() {
 		return id;
