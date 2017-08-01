@@ -61,7 +61,7 @@ public class ReciplyApplication {
 
 	@Autowired
 	private IngredientRepository ingredientrepository;
-
+ 
 	private static final Logger log = LoggerFactory
 			.getLogger(ReciplyApplication.class);
 
