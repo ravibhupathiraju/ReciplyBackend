@@ -1,6 +1,5 @@
 package com.lmig.reciply;
 
-
 import com.lmig.reciply.MealPlan;
 
 import java.time.LocalDate;
@@ -14,11 +13,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public interface MealPlanRepository extends JpaRepository<MealPlan, Integer> {
-	
-	List<MealPlan> findByuserID(String userId);
+
 	MealPlan findByplanId(Integer id);
-	@Query("SELECT m from MealPlan m where m.userID = :userId and m.weekBeginDate = :date)")
-	List<MealPlan> searchWithDate(@Param("userId") String userId,@Param("date") LocalDate weekBeginDate);
-	@Query("SELECT m from MealPlan m where m.userID = :userId)")
+
+	@Query("SELECT m from MealPlan m where m.userID = :userId and m.weekBeginDate = :date) order by m.weekBeginDate")
+	List<MealPlan> searchWithDate(@Param("userId") String userId, @Param("date") LocalDate weekBeginDate);
+
+//	@Query("SELECT m from MealPlan m Recipe R where m.userID = :userId order by m.weekBeginDate and R.dayNo)")
+	@Query("SELECT m from MealPlan m where m.userID = :userId order by m.weekBeginDate)")
 	List<MealPlan> search(@Param("userId") String userId);
-}
+} 
