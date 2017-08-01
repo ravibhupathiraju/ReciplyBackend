@@ -53,6 +53,8 @@ public class ReciplyRestController {
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
+	Utilities utils = new Utilities();
+	
 	// Post method to add user
 	@RequestMapping(value = "/api/User", method = RequestMethod.POST)
 	public HttpStatus addUser(
@@ -93,7 +95,9 @@ public class ReciplyRestController {
 	public AppUser register(
 			@Validated(AppUser.New.class) @RequestBody AppUser user) {
 		AppUser userFound = userRepository.findByUserId(user.userId);
-		if (userFound == null) {
+		if (userFound == null) {  //user doesn't already exist in database
+			String pwd = user.password;
+			user.password = utils.hashPassword(pwd);			
 			userRepository.save(user);
 			return user;
 		} else {
@@ -106,8 +110,12 @@ public class ReciplyRestController {
 
 	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
 	public AppUser login(@RequestBody AppUser user) {
+		System.out.println("*** Password passed into login = "+user.password);
+		String pwd = utils.hashPassword(user.password);
+		System.out.println("*** Password hashed = "+pwd);
 		return userRepository.findByUserIdAndPassword(user.userId,
-				user.password);
+				pwd);
+//		user.password);
 	}
 
 	// Post method to add mealplan

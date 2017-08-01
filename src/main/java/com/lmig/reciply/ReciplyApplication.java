@@ -67,9 +67,6 @@ public class ReciplyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReciplyApplication.class, args);
-		Utilities utils = new Utilities();
-		String password = "Glen";
-		System.out.println("***New Password = " + utils.hashPassword(password));
 	}
 
 	@Bean
