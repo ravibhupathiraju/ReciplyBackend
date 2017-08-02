@@ -29,7 +29,7 @@ public class AppUser implements Serializable {
 	private int id;
 
 	@NotNull(message = "User Name is required input", groups = New.class)
-	@Size(min = 6, max = 15)
+	@Size(min = 6, max = 15, message = "User Name size should be between 6 and 15", groups = New.class)
 	// @Column(unique=true)
 	String userId;
 
