@@ -45,7 +45,7 @@ public class AppUser implements Serializable {
 	String lastName;
 
 	@NotNull(message = "Password is required input", groups = New.class)
-	@Size(min = 6, max = 16)
+//	@Size(min = 6, max = 16)
 	String password;
 
 	public AppUser() {

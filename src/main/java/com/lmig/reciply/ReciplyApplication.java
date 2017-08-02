@@ -61,15 +61,12 @@ public class ReciplyApplication {
 
 	@Autowired
 	private IngredientRepository ingredientrepository;
-
+ 
 	private static final Logger log = LoggerFactory
 			.getLogger(ReciplyApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReciplyApplication.class, args);
-		Utilities utils = new Utilities();
-		String password = "Glen";
-		System.out.println("***New Password = " + utils.hashPassword(password));
 	}
 
 	@Bean

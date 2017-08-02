@@ -1,48 +1,27 @@
 package com.lmig.reciply;
 
-import java.lang.annotation.Repeatable;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lmig.reciply.AppUser.Existing;
-import com.lmig.reciply.AppUser.New;
+import com.lmig.reciply.Utilities;
 
 import io.swagger.annotations.ApiOperation;
 
-import com.lmig.reciply.AppUserRepository;
-import com.lmig.reciply.MealPlanRepository;
-import com.lmig.reciply.IngredientRepository;
-
 @RestController
-public class ReciplyRestController {
+public class ReciplyRestController  {
 
 	@Autowired
 	private AppUserRepository userRepository;
@@ -53,10 +32,11 @@ public class ReciplyRestController {
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
+	Utilities utils = new Utilities();
+	
 	// Post method to add user
 	@RequestMapping(value = "/api/User", method = RequestMethod.POST)
-	public HttpStatus addUser(
-			@Validated(AppUser.New.class) @RequestBody AppUser user) {
+	public HttpStatus addUser(@Validated(AppUser.New.class) @RequestBody AppUser user) {
 		if (user == null) {
 			return HttpStatus.BAD_REQUEST;
 		}
@@ -65,8 +45,7 @@ public class ReciplyRestController {
 	}
 
 	@RequestMapping(value = "/api/User", method = RequestMethod.PUT)
-	public AppUser updateUser(
-			@Validated(AppUser.Existing.class) @RequestBody AppUser user) {
+	public AppUser updateUser(@Validated(AppUser.Existing.class) @RequestBody AppUser user) {
 		AppUser existing = userRepository.findOne(user.getId());
 		existing.merge(user);
 		userRepository.save(existing);
@@ -90,10 +69,11 @@ public class ReciplyRestController {
 
 	@RequestMapping(path = "/api/register", method = RequestMethod.POST)
 	@ApiOperation(value = "Registers a new user", notes = "Will add a new user to the recip-ly database.")
-	public AppUser register(
-			@Validated(AppUser.New.class) @RequestBody AppUser user) {
+	public AppUser register(@Validated(AppUser.New.class) @RequestBody AppUser user) {
 		AppUser userFound = userRepository.findByUserId(user.userId);
-		if (userFound == null) {
+		if (userFound == null) {  //user doesn't already exist in database
+			String pwd = user.password;
+			user.password = utils.hashPassword(pwd);			
 			userRepository.save(user);
 			return user;
 		} else {
@@ -106,18 +86,20 @@ public class ReciplyRestController {
 
 	@RequestMapping(path = "/api/login", method = RequestMethod.POST)
 	public AppUser login(@RequestBody AppUser user) {
+		String pwd = utils.hashPassword(user.password);
 		return userRepository.findByUserIdAndPassword(user.userId,
-				user.password);
+				pwd);
 	}
 
 	// Post method to add mealplan
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.POST)
-	public MealPlan addMealPlan(@RequestBody MealPlan mealPlan) {
+	public MealPlan addMealPlan (@RequestBody MealPlan mealPlan) {
 		// if (mealPlan == null) {
 		// return new ResponseEntity<MealPlan>(HttpStatus.BAD_REQUEST);
 		// }
-		mealPlanRepository.save(mealPlan);
-		return mealPlan;
+		Collections.sort(mealPlan.getRecipes(),new Utilities());
+		mealPlanRepository.save(mealPlan);  
+		return mealPlan; 
 	}
 
 	// Put method to add mealplan
@@ -132,31 +114,41 @@ public class ReciplyRestController {
 	// Search method to get weekly plan, recipe name and ingredients information
 	// Input will be user id, week beginning date
 	@RequestMapping(value = "/api/mealPlan", method = RequestMethod.GET)
-	public List<MealPlan> getMealPlan(
-			@RequestParam(defaultValue = "") String userId,
+	public ResponseEntity<List<MealPlan>> getMealPlan(@RequestParam(defaultValue = "") String userId,
 			@RequestParam(defaultValue = "") String dateString) {
+		if (userId.equals(null) || userId.equals("")) {
+			return new ResponseEntity<List<MealPlan>>(HttpStatus.BAD_REQUEST);
+		}
 		LocalDate weekBeginDate = null;
+		List<MealPlan> mealPlanList;
 		if (dateString.equals("")) {
-			return mealPlanRepository.search(userId);
+			mealPlanList = mealPlanRepository.search(userId);
+			
+			if (mealPlanList.isEmpty()) {
+				return new ResponseEntity<List<MealPlan>>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<List<MealPlan>>(mealPlanList, HttpStatus.OK);
 		} else {
-			DateTimeFormatter formatter = DateTimeFormatter
-					.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			weekBeginDate = LocalDate.parse(dateString, formatter);
-			return mealPlanRepository.searchWithDate(userId, weekBeginDate);
+			mealPlanList = mealPlanRepository.searchWithDate(userId, weekBeginDate);
+			if (mealPlanList.isEmpty()) {
+				return new ResponseEntity<List<MealPlan>>(mealPlanList, HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<List<MealPlan>>(mealPlanList, HttpStatus.OK);
 		}
 
 	}
+	
 
 	@RequestMapping(path = "/api/mealPlan/{id}", method = RequestMethod.DELETE)
-	public void deleteMealPlan(
-			@PathVariable(name = "id", required = true) int id) {
+	public void deleteMealPlan(@PathVariable(name = "id", required = true) int id) {
 		mealPlanRepository.delete(id);
 	}
 
 	// POST method to update Ingredients entity related to shopping list
 	@RequestMapping(value = "/api/ShoppingList", method = RequestMethod.PUT)
-	public List<Ingredient> postShopList(
-			@RequestBody List<Ingredient> ingredient) {
+	public List<Ingredient> postShopList(@RequestBody List<Ingredient> ingredient) {
 		// if (mealPlan == null) {
 		// return new ResponseEntity<MealPlan>(HttpStatus.BAD_REQUEST);
 		// }
@@ -168,19 +160,16 @@ public class ReciplyRestController {
 	// Search method to get weekly plan, recipe name and ingredients information
 	// Input will be user id, week beginning date
 	@RequestMapping(value = "/api/shoppinglist", method = RequestMethod.GET)
-	public List<Ingredient> getShoppingList(
-			@RequestParam(defaultValue = "") String userId,
+	public List<Ingredient> getShoppingList(@RequestParam(defaultValue = "") String userId,
 			@RequestParam(defaultValue = "") String dateString) {
 		LocalDate weekBeginDate = null;
 		if (dateString.equals("")) {
 			return null;
 		} else {
 			ArrayList<Ingredient> missingIngredients = new ArrayList<Ingredient>();
-			DateTimeFormatter formatter = DateTimeFormatter
-					.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			weekBeginDate = LocalDate.parse(dateString, formatter);
-			List<MealPlan> mealPlan = mealPlanRepository.searchWithDate(userId,
-					weekBeginDate);
+			List<MealPlan> mealPlan = mealPlanRepository.searchWithDate(userId, weekBeginDate);
 			for (MealPlan mealPlan2 : mealPlan) {
 				List<Recipe> recipes = mealPlan2.getRecipes();
 				for (Recipe recipe : recipes) {
@@ -197,5 +186,6 @@ public class ReciplyRestController {
 		}
 
 	}
+	
 
 }
